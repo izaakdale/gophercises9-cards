@@ -10,37 +10,8 @@ import (
 type SuitType int
 type RankType int
 
-const (
-	JokerS SuitType = iota
-	Spades
-	Diamonds
-	Clubs
-	Hearts
-)
-const (
-	JokerT RankType = iota
-	Ace
-	Two
-	Three
-	Four
-	Five
-	Six
-	Seven
-	Eight
-	Nine
-	Ten
-	Jack
-	Queen
-	King
-)
-
 type Deck struct {
 	Cards []Card
-}
-
-type Card struct {
-	Suit SuitType
-	Rank RankType
 }
 
 func NewDeck(shuffle bool, jacks int) Deck {
@@ -72,9 +43,10 @@ func NewDeck(shuffle bool, jacks int) Deck {
 
 }
 
-func (c Card) ShowCard() {
-	// fmt.Printf("%s of %s\n", c.Rank.String(), c.Suit.String())
-	c.showCliCard()
+func (d *Deck) Draw() Card {
+	ret := d.Cards[0]
+	d.Cards = append(d.Cards[1:], ret)
+	return ret
 }
 
 func (d Deck) ShowDeck() {

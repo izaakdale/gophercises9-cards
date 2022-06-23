@@ -1,6 +1,9 @@
 package deck
 
-import "fmt"
+import (
+	"github.com/fatih/color"
+	colors "github.com/fatih/color"
+)
 
 // 8 of spades should look like this...
 //  __________
@@ -56,34 +59,40 @@ var paddingString = "|          |"
 var topCardString = " __________"
 var bottonCardString = " ----------"
 
-func (c Card) getCliCardStrings() (string, string, string, string) {
+func (c Card) getCliCardStrings() (string, string, string, string, func(format string, a ...interface{})) {
 	var topNumber, bottomNumber, topSuit, bottomSuit string
+	var col func(format string, a ...interface{})
 
 	switch c.Suit {
 	case Spades:
 		{
 			topSuit = topSuitStringS
 			bottomSuit = bottomSuitStringS
+			col = colors.New(color.FgHiBlue).PrintfFunc()
 		}
 	case Clubs:
 		{
 			topSuit = topSuitStringC
 			bottomSuit = bottomSuitStringC
+			col = colors.New(color.FgHiBlue).PrintfFunc()
 		}
 	case Diamonds:
 		{
 			topSuit = topSuitStringD
 			bottomSuit = bottomSuitStringD
+			col = color.New(color.FgRed).PrintfFunc()
 		}
 	case Hearts:
 		{
 			topSuit = topSuitStringH
 			bottomSuit = bottomSuitStringH
+			col = color.New(color.FgRed).PrintfFunc()
 		}
 	case JokerS:
 		{
 			topSuit = topSuitStringJoker
 			bottomSuit = bottomSuitStringJoker
+			col = colors.New(color.FgHiYellow).PrintfFunc()
 		}
 	}
 
@@ -160,19 +169,19 @@ func (c Card) getCliCardStrings() (string, string, string, string) {
 		}
 	}
 
-	return topNumber, bottomNumber, topSuit, bottomSuit
+	return topNumber, bottomNumber, topSuit, bottomSuit, col
 }
 
 func (c Card) showCliCard() {
-	topN, botN, topS, botS := c.getCliCardStrings()
-	fmt.Printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
-		topCardString,
-		topN,
-		paddingString,
-		topS,
-		botS,
-		paddingString,
-		botN,
-		bottonCardString,
-	)
+
+	topN, botN, topS, botS, col := c.getCliCardStrings()
+
+	col(topCardString + "\n")
+	col(topN + "\n")
+	col(paddingString + "\n")
+	col(topS + "\n")
+	col(botS + "\n")
+	col(paddingString + "\n")
+	col(botN + "\n")
+	col(bottonCardString + "\n")
 }
