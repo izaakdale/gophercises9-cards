@@ -36,10 +36,6 @@ func StartGame() {
 			} else if player.Blackjack() {
 				fmt.Println("You won with a blackjack!")
 				break
-			} else {
-				if dealer.Score < 17 {
-					dealer.Draw(&d, false)
-				}
 			}
 
 			fmt.Printf("Score: %d\n", player.Score)
@@ -51,12 +47,20 @@ func StartGame() {
 			if strings.ToLower(choice) == "hit" || strings.ToLower(choice) == "h" {
 				time.Sleep(time.Second / 2)
 				player.Draw(&d, true)
+				if dealer.Score < 17 {
+					dealer.Draw(&d, false)
+				}
 			} else if strings.ToLower(choice) == "stick" || strings.ToLower(choice) == "s" {
 				// winning logic
 				if player.Score > dealer.Score && dealer.Score <= 21 {
 					fmt.Printf("You won with score of %d against %d\n", player.Score, dealer.Score)
-				} else if player.Score < dealer.Score {
+				} else if player.Score < dealer.Score && dealer.Score <= 21 {
 					fmt.Printf("You lost with score of %d against %d\n", player.Score, dealer.Score)
+				} else if player.Score == dealer.Score && dealer.Score <= 21 {
+					fmt.Printf("Draw with score of %d against %d\n", player.Score, dealer.Score)
+				} else {
+					// only way it hits here is if dealer score is above 21
+					fmt.Printf("You won with score of %d against %d\n", player.Score, dealer.Score)
 				}
 				break
 			} else {
